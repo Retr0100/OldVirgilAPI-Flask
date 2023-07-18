@@ -1,0 +1,22 @@
+{
+        "language": "it",
+        "wordActivation": "Virgilio",
+        "volume": "100",
+        "city" : "Salerno",
+        "Listener" : {
+            "operation_timeout" : "3",
+            "dynamic_energy_threshold" : "true",
+            "energy_threshold" : "3500"
+        },
+        "api" : {
+            "openAI":"sk-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "weather":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "merros":["email","password"],
+            "deeple": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+        "GPT":{
+            "temperature":"0.9",
+            "max_tokens" : "30"
+        }
+
+}
