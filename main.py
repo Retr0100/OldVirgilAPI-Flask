@@ -22,7 +22,6 @@ def get_user(id):
     result = usersCollection.find_one({"userId": str(id)}, {"_id": 0})
     if result is None:
         return jsonify({"Error": "User not found"}), 404
-    print(result["setting"]["volume"])
     return jsonify(result)
 
 
