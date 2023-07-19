@@ -4,7 +4,7 @@ import secrets
 import pymongo
 from pymongo import MongoClient
 
-client = MongoClient(${{MongoDB.MONGO_URL}})
+client = MongoClient($MONGO_URL)
 db = client.virgilUsers
 usersCollection = db.users
 
