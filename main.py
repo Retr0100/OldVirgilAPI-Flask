@@ -3,8 +3,11 @@ import json
 import secrets
 import pymongo
 from pymongo import MongoClient
+import os
 
-client = MongoClient($MONGO_URL)
+url = os.getenv('MONGO_URL')
+print(url)
+client = MongoClient(url)
 db = client.virgilUsers
 usersCollection = db.users
 
