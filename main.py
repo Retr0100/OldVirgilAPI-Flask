@@ -1,24 +1,30 @@
 from flask import Flask, request, jsonify
 import json
 import secrets
-import pymongo
 from pymongo import MongoClient
 import os
 
-url = os.getenv('MONGO_URL')
-print(url)
-client = MongoClient(url)
+#Take the url for connection at the MongoDB
+urlMongo = os.getenv('MONGO_URL')
+
+#Init the clien of Mongo
+client = MongoClient(urlMongo)
+
 db = client.virgilUsers
 usersCollection = db.users
 
 app = Flask('VirgilAPI')
 
+#Take the base of setting
 with open('setting.json', 'r') as f:
     setting = json.load(f)
 
 
 @app.route('/api/setting/<id>/', methods=['GET'])
 def get_user(id):
+    """
+        A function to bring the user's setting through the generated key to Virgilio.    
+    """
     result = usersCollection.find_one({"userId": str(id)}, {"_id": 0})
     if result is None:
         return jsonify({"Error": "User not found"}), 404
@@ -27,6 +33,10 @@ def get_user(id):
 
 @app.route('/api/setting/modify/<string:id>/', methods=['POST'])
 def new_setting(id):
+    """
+       This function subwrite all the setting of Virgil specifing the key of user and
+       send a payload form json        
+    """
     newSetting = request.json
     query = {"userId": str(id)}
     value = {"$set": {'setting': newSetting}}
@@ -36,6 +46,16 @@ def new_setting(id):
 
 @app.route('/api/setting/<string:id>/<string:setting>/<string:subKey>/<string:indexArr>/<value>', methods=['PUT'])
 def modify_setting(id, setting, subKey, indexArr, value):
+    """
+       This function is intended to change only one value of the Virgil setting the only weakness is that you can only change one value at a time in fact it is an obsolete and unused function at the moment its operation is not complex in the url you specify the json path to the file and finally the value 
+
+        ex: key/"key1"/"key2"/"$"/value
+
+        In this example where I have inserted the dollar it means that the key does not have a 3 key and simply only the first two will be considered with the final value this obviously also applies to other lengths 
+
+        max length 3 (this is only for Virgil's own use)
+             
+    """
     newSetting = usersCollection.find_one({"userId": str(id)}, {"_id": 0})
     if newSetting is None:
         return jsonify({"Error": "User not found"}), 404
@@ -53,14 +73,18 @@ def modify_setting(id, setting, subKey, indexArr, value):
 
 @app.route('/api/createUser', methods=['PUT'])
 def create_user():
-    id = secrets.token_hex(16)
-    print(id)
+    """
+    This function creates a new user which is entered into the database by the simple random key generated randomly and the setting base    
+    """
+    key = secrets.token_hex(16)
+    print(key)
     result = usersCollection.insert_one({
-        "userId": id,
+        "userId": key,
         "setting": setting
     })
+    
     return jsonify({
-        "userId": id,
+        "userId": key,
         "setting": setting
     }), 201
 
