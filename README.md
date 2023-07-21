@@ -1,6 +1,6 @@
 ---
 title: VirgilAPI
-description: API created to allow communication between a Flutter Android application and a Python application. \n the API is very simple and is linked at a Database hosted with the api on railway in fact, all requests go through the database
+description: API created to allow communication between a Flutter Android application and a Python application.the API is very simple and is linked at a Database hosted with the api on railway in fact, all requests go through the database
 tags:
   - python
   - flask
