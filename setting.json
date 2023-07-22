@@ -9,7 +9,8 @@
         "elevenlabs" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "openAI":"sk-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "weather":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "merros":["email","password"],
+        "merrosEmail":"email",
+        "merrosPassword":"password",
         "deeple": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "temperature":"0.9",
         "max_tokens" : "30"

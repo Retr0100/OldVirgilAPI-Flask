@@ -30,18 +30,24 @@ def get_user(id):
         return jsonify({"Error": "User not found"}), 404
     return jsonify(result)
 
+def checkEmailPass(list):
+    
+    for i in list:
+        if(i == ""):
+            return False
 
 @app.route('/api/setting/modify/<string:id>/', methods=['POST'])
 def new_setting(id):
     """
        This function subwrite all the setting of Virgil specifing the key of user and
-       send a payload form json        
+       send a payload form json and skip the value empty       
     """
     newSetting = request.json
     updates = {}
     for key, value in newSetting.items():
             if(value != ""):
                 updates[f"setting.{key}"] = value
+
     query = {"userId": str(id)}
     value = {"$set": updates}
     result = usersCollection.update_many(query, value)
