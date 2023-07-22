@@ -8,7 +8,7 @@ import os
 urlMongo = os.getenv('MONGO_URL')
 
 #Init the clien of Mongo
-client = MongoClient('mongodb://mongo:FpziAXX6LxYZppYFZwVP@containers-us-west-101.railway.app:6626')
+client = MongoClient(urlMongo)
 
 db = client.virgilUsers
 usersCollection = db.users
