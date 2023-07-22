@@ -8,7 +8,7 @@ import os
 urlMongo = os.getenv('MONGO_URL')
 
 #Init the clien of Mongo
-client = MongoClient(urlMongo)
+client = MongoClient('mongodb://mongo:FpziAXX6LxYZppYFZwVP@containers-us-west-101.railway.app:6626')
 
 db = client.virgilUsers
 usersCollection = db.users
@@ -38,36 +38,13 @@ def new_setting(id):
        send a payload form json        
     """
     newSetting = request.json
+    updates = {}
+    for key, value in newSetting.items():
+            if(value != ""):
+                updates[f"setting.{key}"] = value
     query = {"userId": str(id)}
-    value = {"$set": {'setting': newSetting}}
-    result = usersCollection.update_one(query, value)
-    return jsonify(newSetting)
-
-
-@app.route('/api/setting/<string:id>/<string:setting>/<string:subKey>/<string:indexArr>/<value>', methods=['PUT'])
-def modify_setting(id, setting, subKey, indexArr, value):
-    """
-       This function is intended to change only one value of the Virgil setting the only weakness is that you can only change one value at a time in fact it is an obsolete and unused function at the moment its operation is not complex in the url you specify the json path to the file and finally the value 
-
-        ex: key/"key1"/"key2"/"$"/value
-
-        In this example where I have inserted the dollar it means that the key does not have a 3 key and simply only the first two will be considered with the final value this obviously also applies to other lengths 
-
-        max length 3 (this is only for Virgil's own use)
-             
-    """
-    newSetting = usersCollection.find_one({"userId": str(id)}, {"_id": 0})
-    if newSetting is None:
-        return jsonify({"Error": "User not found"}), 404
-    if subKey != '$' and indexArr == '$':
-        newSetting["setting"][setting][subKey] = value
-    elif subKey != '$' and indexArr != '$':
-        newSetting["setting"][setting][subKey][int(indexArr)] = value
-    elif subKey == '$' and indexArr == '$':
-        newSetting["setting"][setting] = value
-    query = {"userId": str(id)}
-    value = {"$set": newSetting}
-    result = usersCollection.update_one(query, value)
+    value = {"$set": updates}
+    result = usersCollection.update_many(query, value)
     return jsonify(newSetting)
 
 
@@ -90,4 +67,4 @@ def create_user():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1111, debug=True)
+    app.run(host='0.0.0.0', port=1111, debug=False)
