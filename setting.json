@@ -8,10 +8,8 @@
         "energy_threshold" : "3500",
         "elevenlabs" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "openAI":"sk-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "weather":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "merrosEmail":"email",
         "merrosPassword":"password",
-        "deeple": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "temperature":"0.9",
         "max_tokens" : "30"
 }
