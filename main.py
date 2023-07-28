@@ -77,7 +77,7 @@ def create_user():
 # ---------- CALENDAR FUNCTION ----------
 
 @app.route('/api/calendar/<id>/', methods=['GET'])
-def get_calendarUser(id):
+def get_Events(id):
     """
         A function to bring the caledar user's through the generated key to Virgilio.    
     """
