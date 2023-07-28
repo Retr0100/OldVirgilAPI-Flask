@@ -9,23 +9,27 @@ urlMongo = os.getenv('MONGO_URL')
 
 #Init the clien of Mongo
 client = MongoClient(urlMongo)
+client = MongoClient("mongodb://mongo:FpziAXX6LxYZppYFZwVP@containers-us-west-101.railway.app:6626")
+
 
 db = client.virgilUsers
 usersCollection = db.users
-
+calendarCollection = db.calendarEvent
 app = Flask('VirgilAPI')
 
+
+
+# ---------- USER FUNCTION ----------
 #Take the base of setting
 with open('setting.json', 'r') as f:
     setting = json.load(f)
-
 
 @app.route('/api/setting/<id>/', methods=['GET'])
 def get_user(id):
     """
         A function to bring the user's setting through the generated key to Virgilio.    
     """
-    result = usersCollection.find_one({"userId": str(id)}, {"_id": 0})
+    result = usersCollection.find_one({"userId": str(id)}, {"_id": 0,"userId":0})
     if result is None:
         return jsonify({"Error": "User not found"}), 404
     return jsonify(result)
@@ -53,7 +57,6 @@ def new_setting(id):
     result = usersCollection.update_many(query, value)
     return jsonify(newSetting)
 
-
 @app.route('/api/createUser', methods=['PUT'])
 def create_user():
     """
@@ -72,5 +75,32 @@ def create_user():
     }), 201
 
 
+# ---------- CALENDAR FUNCTION ----------
+
+@app.route('/api/calendar/<id>/', methods=['GET'])
+def get_calendarUser(id):
+    """
+        A function to bring the caledar user's through the generated key to Virgilio.    
+    """
+    result = calendarCollection.find_one({"userId": str(id)}, {"_id": 0,"userId":0}) 
+    if result is None:
+        return jsonify({"Error": "User not found"}), 404
+    return jsonify(result)
+
+@app.route('/api/calendar/createUser/<id>/', methods=['PUT'])
+def createUser(id):
+    calendarCollection.insert_one({"userId": id}) #Prepare the user for give event
+    return id,201
+
+@app.route('/api/calendar/createEvent/<id>/', methods=['POST'])
+def create_event(id):
+    events = request.json
+    query = {"userId": str(id)}
+    value = {"$set": events}
+    result = calendarCollection.update_many(query,value) #Add event
+    if result is None:
+        return jsonify({"Error": "User not found"}), 404
+    return value,201
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1111, debug=False)
+    app.run(host='127.0.0.1', port=1111, debug=False)
