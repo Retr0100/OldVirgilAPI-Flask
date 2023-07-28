@@ -9,7 +9,6 @@ urlMongo = os.getenv('MONGO_URL')
 
 #Init the clien of Mongo
 client = MongoClient(urlMongo)
-client = MongoClient("mongodb://mongo:FpziAXX6LxYZppYFZwVP@containers-us-west-101.railway.app:6626")
 
 
 db = client.virgilUsers
@@ -103,4 +102,4 @@ def create_event(id):
     return value,201
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=1111, debug=False)
+    app.run(host='0.0.0.0', port=1111, debug=False)
