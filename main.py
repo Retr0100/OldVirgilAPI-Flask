@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask, request, jsonify
 import json
 import secrets
@@ -7,9 +8,9 @@ import os
 #Take the url for connection at the MongoDB
 urlMongo = os.getenv('MONGO_URL')
 
+
 #Init the clien of Mongo
 client = MongoClient(urlMongo)
-
 
 db = client.virgilUsers
 usersCollection = db.users
@@ -91,15 +92,24 @@ def createUser(id):
     calendarCollection.insert_one({"userId": id}) #Prepare the user for give event
     return id,201
 
-@app.route('/api/calendar/createEvent/<id>/', methods=['POST'])
-def create_event(id):
+@app.route('/api/calendar/createEvent/<id>/<date>/', methods=['POST'])
+def create_event(id,date):
     events = request.json
+    date = datetime.datetime.now().date()
+    result = calendarCollection.find_one({"userId":id},{date:1}) #22-05-2002
     query = {"userId": str(id)}
-    value = {"$set": events}
-    result = calendarCollection.update_many(query,value) #Add event
+    if(result is None or date not in result):
+        print("USER NOT FOUND")
+        value = {"$set": events}
+        result = calendarCollection.insert_one(query,value)
+    else:
+        print("USER FOUND")
+        print(events[date])
+        value = {"$push": {date: {"$each": events[date]}}}
+        result = calendarCollection.update_many(query,value) #Add event
     if result is None:
         return jsonify({"Error": "User not found"}), 404
     return value,201
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1111, debug=False)
+    app.run(host='1.1.1.1', port=1111, debug=False)
