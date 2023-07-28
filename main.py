@@ -99,11 +99,11 @@ def create_event(id,date):
     print(events)
     print(date)
     print(id)
-    query = {"userId": str(id)}
+    query = {"userId": id}
     if(result is None or date not in result):
         print("USER NOT FOUND")
         value = {"$set": events}
-        result = calendarCollection.insert_one(query,value)
+        result = calendarCollection.update_one(query,value)
     else:
         print("USER FOUND")
         print(events[date])
@@ -114,4 +114,4 @@ def create_event(id,date):
     return value,201
 
 if __name__ == '__main__':
-    app.run(host='1.1.1.1', port=1111, debug=False)
+    app.run(host='0.0.0.0', port=1111, debug=False)
