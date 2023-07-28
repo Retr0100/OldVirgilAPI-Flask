@@ -92,10 +92,13 @@ def createUser(id):
     calendarCollection.insert_one({"userId": id}) #Prepare the user for give event
     return id,201
 
-@app.route('/api/calendar/createEvent/<id>/<date>/', methods=['POST'])
+@app.route('/api/calendar/createEvent/<string:id>/<string:date>/', methods=['POST'])
 def create_event(id,date):
     events = request.json
     result = calendarCollection.find_one({"userId":id},{date:1}) #22-05-2002
+    print(events)
+    print(date)
+    print(id)
     query = {"userId": str(id)}
     if(result is None or date not in result):
         print("USER NOT FOUND")
