@@ -95,7 +95,6 @@ def createUser(id):
 @app.route('/api/calendar/createEvent/<id>/<date>/', methods=['POST'])
 def create_event(id,date):
     events = request.json
-    date = datetime.datetime.now().date()
     result = calendarCollection.find_one({"userId":id},{date:1}) #22-05-2002
     query = {"userId": str(id)}
     if(result is None or date not in result):
