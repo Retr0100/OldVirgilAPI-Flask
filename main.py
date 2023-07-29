@@ -121,7 +121,6 @@ def delete_event(id):
         return jsonify({"Delete": "No events yesterday "}), 202
     else:
         print("USER FOUND")
-        print(events[yesterday])
         value = {"$unset": {yesterday: 1}}
         result = calendarCollection.delete_one(query,value) #Add event
     if result is None:
