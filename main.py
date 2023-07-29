@@ -114,7 +114,8 @@ def create_event(id,date):
 def delete_event(id):
     today = datetime.datetime.today()
     yesterday = today.date() + datetime.timedelta(days=-1)
-    yesterday = str(yesterday).split("-")
+    yesterday = yesterday.strftime("%d-%m-%Y")
+    yesterday = yesterday.split("-")
     yesterday[1] = yesterday[1].replace("0","")
     yesterday  = "-".join(yesterday)
     print(yesterday)
