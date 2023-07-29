@@ -114,6 +114,9 @@ def create_event(id,date):
 def delete_event(id):
     date = today = datetime.datetime.today()
     yesterday = today.date() + datetime.timedelta(days=-1)
+    yesterday = yesterday.split("-")
+    yesterday[1] = yesterday[1].replace("0","")
+    yesterday  = "-".join(yesterday)
     result = calendarCollection.find_one({"userId":id},{yesterday:1}) 
     query = {"userId": id}
     if(result is None or yesterday not in result):
