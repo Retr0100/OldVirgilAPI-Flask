@@ -98,12 +98,9 @@ def create_event(id,date):
     result = calendarCollection.find_one({"userId":id},{date:1}) 
     query = {"userId": id}
     if(result is None or date not in result):
-        print("USER NOT FOUND")
         value = {"$set": events}
         result = calendarCollection.update_one(query,value)
     else:
-        print("USER FOUND")
-        print(events[date])
         value = {"$push": {date: {"$each": events[date]}}}
         result = calendarCollection.update_many(query,value) #Add event
     return value,201
@@ -120,14 +117,11 @@ def delete_event(id):
     yesterday = yesterday.split("-")
     yesterday[1] = yesterday[1].replace("0","")
     yesterday  = "-".join(yesterday)
-    print(yesterday)
     result = calendarCollection.find_one({"userId":id}) 
     query = {"userId": id}
     if(result is None or yesterday not in result):
-        print("USER NOT FOUND")
         return jsonify({"Delete": "No events yesterday "}), 202
     else:
-        print("USER FOUND")
         value = {"$unset": {yesterday: 1}}
         result = calendarCollection.update_one(query,value) #Add event
     return value,201
