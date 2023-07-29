@@ -54,7 +54,7 @@ def new_setting(id):
 
     query = {"userId": str(id)}
     value = {"$set": updates}
-    result = usersCollection.update_many(query, value)
+    usersCollection.update_many(query, value)
     return jsonify(newSetting)
 
 @app.route('/api/createUser', methods=['PUT'])
@@ -110,6 +110,10 @@ def create_event(id,date):
 
 @app.route('/api/calendar/deleteEvent/<id>/', methods=['PUT'])
 def delete_event(id):
+    """
+        A function to delete the old event in Automatic.    
+    """
+    
     today = datetime.datetime.today()
     yesterday = today.date() + datetime.timedelta(days=-1)
     yesterday = yesterday.strftime("%d-%m-%Y")
