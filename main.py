@@ -117,7 +117,8 @@ def delete_event(id):
     yesterday = str(yesterday).split("-")
     yesterday[1] = yesterday[1].replace("0","")
     yesterday  = "-".join(yesterday)
-    result = calendarCollection.find_one({"userId":id},{yesterday:1}) 
+    print(yesterday)
+    result = calendarCollection.find_one({"userId":id}) 
     query = {"userId": id}
     if(result is None or yesterday not in result):
         print("USER NOT FOUND")
