@@ -106,8 +106,6 @@ def create_event(id,date):
         print(events[date])
         value = {"$push": {date: {"$each": events[date]}}}
         result = calendarCollection.update_many(query,value) #Add event
-    if result is None:
-        return jsonify({"Error": "User not found"}), 404
     return value,201
 
 @app.route('/api/calendar/deleteEvent/<id>/', methods=['PUT'])
@@ -127,9 +125,7 @@ def delete_event(id):
     else:
         print("USER FOUND")
         value = {"$unset": {yesterday: 1}}
-        result = calendarCollection.delete_one(query,value) #Add event
-    if result is None:
-        return jsonify({"Error": "User not found"}), 404
+        result = calendarCollection.update_one(query,value) #Add event
     return value,201
 
 if __name__ == '__main__':
