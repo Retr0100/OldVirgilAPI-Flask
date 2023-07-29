@@ -112,7 +112,7 @@ def create_event(id,date):
 
 @app.route('/api/calendar/deleteEvent/<id>/', methods=['PUT'])
 def delete_event(id):
-    date = today = datetime.datetime.today()
+    today = datetime.datetime.today()
     yesterday = today.date() + datetime.timedelta(days=-1)
     yesterday = str(yesterday).split("-")
     yesterday[1] = yesterday[1].replace("0","")
