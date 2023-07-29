@@ -92,13 +92,10 @@ def createUser(id):
     calendarCollection.insert_one({"userId": id}) #Prepare the user for give event
     return id,201
 
-@app.route('/api/calendar/createEvent/<string:id>/<string:date>/', methods=['PUT'])
+@app.route('/api/calendar/createEvent/<id>/<date>/', methods=['PUT'])
 def create_event(id,date):
     events = request.json
-    result = calendarCollection.find_one({"userId":id},{date:1}) #22-05-2002
-    print(events)
-    print(date)
-    print(id)
+    result = calendarCollection.find_one({"userId":id},{date:1}) 
     query = {"userId": id}
     if(result is None or date not in result):
         print("USER NOT FOUND")
@@ -109,6 +106,24 @@ def create_event(id,date):
         print(events[date])
         value = {"$push": {date: {"$each": events[date]}}}
         result = calendarCollection.update_many(query,value) #Add event
+    if result is None:
+        return jsonify({"Error": "User not found"}), 404
+    return value,201
+
+@app.route('/api/calendar/deleteEvent/<id>/', methods=['PUT'])
+def delete_event(id):
+    date = today = datetime.datetime.today()
+    yesterday = today.date() + datetime.timedelta(days=-1)
+    result = calendarCollection.find_one({"userId":id},{yesterday:1}) 
+    query = {"userId": id}
+    if(result is None or yesterday not in result):
+        print("USER NOT FOUND")
+        return jsonify({"Delete": "No events yesterday "}), 202
+    else:
+        print("USER FOUND")
+        print(events[yesterday])
+        value = {"$unset": {yesterday: 1}}
+        result = calendarCollection.delete_one(query,value) #Add event
     if result is None:
         return jsonify({"Error": "User not found"}), 404
     return value,201
