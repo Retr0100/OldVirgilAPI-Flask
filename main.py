@@ -101,7 +101,7 @@ def create_event(id,date):
         value = {"$set": events}
         result = calendarCollection.update_one(query,value)
     else:
-        value = {"$push": {date: {"$each": events[date]}}}
+        value = {"$push": {date: {"$each": events}}}
         result = calendarCollection.update_many(query,value) #Add event
     return value,201
 
